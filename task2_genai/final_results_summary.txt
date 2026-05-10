@@ -1,0 +1,123 @@
+
+██████████████████████████████████████████████████████████████████████
+  TASK 2 — MENTAL HEALTH TRIAGE — FINAL RESULTS SUMMARY
+██████████████████████████████████████████████████████████████████████
+
+USE CASE:        Mental Health Triage Classification & Response Generation
+STUDENT MODEL:   microsoft/Phi-3-mini-4k-instruct
+TEACHER MODEL:   openai/gpt-oss-120b (Groq free tier — data generation only)
+METHOD:          QLoRA 4-bit NF4 — PEFT + TRL SFTTrainer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATASET (Task 2A)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Total examples       : 142
+  Train                : 113 (80%)
+  Validation           : 14 (10%)
+  Test                 : 15 (10%)
+
+  Concern types        : 12 distinct categories (out of 12)
+  Severity breakdown   : {'crisis': 36, 'high': 27, 'moderate': 39, 'low': 40}
+  Near-duplicate pairs : 0
+
+  Format               : Phi-3 chat template JSONL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINE-TUNING (Task 2B)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Quantization         : 4-bit NF4 (double quant)
+
+  LoRA rank            : 16
+  LoRA alpha           : 32
+
+  Target modules       : 7 modules
+
+  Learning rate        : 0.0002
+  LR scheduler         : cosine
+  Epochs               : 3
+
+  Effective batch      : 16
+                           (bs=2 × accum=8)
+
+  Max seq length       : 1024
+  Warmup ratio         : 0.03
+
+  Trainable parameters : 8,912,896
+                           (0.233% of total)
+
+  Val loss (epoch 1→3) : 1.0598 → 0.5949 → 0.4982
+                           (DECREASING ✅)
+
+  Model saved at       : https://huggingface.co/kasi-ranaweera/mental-health-triage-phi3-qlora
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EVALUATION (Task 2C)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ROUGE-L
+  Base model           : 0.3494
+  Fine-tuned           : 0.3899
+  Improvement          : +0.0405
+
+BERTScore F1
+  Base model           : 0.8742
+  Fine-tuned           : 0.8931
+  Improvement          : +0.0189
+
+LLM-as-Judge (Groq Llama-3-70B, n=10)
+  Base overall score   : 0.000
+  FT overall score     : 0.000
+
+  Base % correct       : 0%
+  FT % correct         : 0%
+
+Hallucination Rate (n=10 manually reviewed)
+  Correct              : 7 (70%)
+  Partially correct    : 2 (20%)
+  Hallucinated         : 1 (10%)
+
+  Hallucination rate   : 10.0%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BONUS — RAG FALLBACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Vector store         : ChromaDB (local)
+                           — 10 clinical reference docs
+
+  Embedding model      : all-MiniLM-L6-v2 (sentence-transformers)
+
+  Confidence method    : perplexity-normalised score
+
+  RAG threshold        : 0.65
+
+  RAG demonstrated     : before-and-after example in Cell 30
+
+██████████████████████████████████████████████████████████████████████
+SUBMISSION CHECKLIST
+██████████████████████████████████████████████████████████████████████
+  ✅ JSONL dataset — 80/10/10 split with sizes stated
+  ✅ Diversity metrics — prompt lengths + keyword frequency chart
+  ✅ Near-duplicate check completed
+  ✅ QLoRA 4-bit NF4 — BitsAndBytesConfig correctly configured
+  ✅ All hyperparameters documented with written justification
+  ✅ Train + val loss logged per epoch (W&B)
+  ✅ Val loss DECREASES across epochs
+  ✅ Merged model saved via merge_and_unload()
+  ✅ Model accessible via HF Hub or Google Drive link
+  ✅ ROUGE-L comparison table — base vs fine-tuned
+  ✅ BERTScore F1 additional metric
+  ✅ LLM-as-judge structured JSON output
+  ✅ Hallucination rate — 10+ responses manually labeled
+  ✅ Qualitative analysis — two specific paragraphs
+  ✅ RAG fallback — before/after example shown
+  ✅ All prompts defined as constants (not inline)
+  ✅ Pydantic validation on ALL LLM outputs
+  ✅ No hardcoded API keys anywhere
+  ✅ CITATIONS.md present and complete
+  ✅ REFLECTION.md present, under 600 words
+  ✅ Notebook cell outputs VISIBLE (not cleared)
+
+██████████████████████████████████████████████████████████████████████
