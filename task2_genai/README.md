@@ -22,7 +22,7 @@ empathetic opening, and follow-up question — all in structured JSON.
 | Parameter | Value | Justification |
 |-----------|-------|--------------|
 | Student model | Phi-3-mini-4k-instruct | Fits T4 VRAM; strong instruction following |
-| Teacher model | Groq llama3-70b-8192 | Different from student; free tier |
+| Teacher model | Groq llama-3.3-70b-versatile (primary); fallback: openai/gpt-oss-120b | Used for data generation only; free tier with rate limits |
 | Quantization | 4-bit NF4 double quant | Best bits-per-quality ratio for LLMs |
 | LoRA rank | 16 | Sufficient subspace for clinical vocab remapping |
 | LoRA alpha | 32 | 2x ratio — stronger adapter influence |
