@@ -7,7 +7,7 @@
 [![HuggingFace](https://img.shields.io/badge/🤗%20Model-mental--health--triage--phi3--qlora-yellow)](https://huggingface.co/kasi-ranaweera/mental-health-triage-phi3-qlora)
 [![W&B](https://img.shields.io/badge/W%26B-Training%20Run-orange)](https://wandb.ai/kasi-ranaweera/mental-health-triage-finetune)
 
-</dev>
+</div>
 
 ---
 

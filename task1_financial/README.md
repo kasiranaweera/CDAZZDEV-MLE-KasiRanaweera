@@ -7,7 +7,7 @@
 [![Groq](https://img.shields.io/badge/LLM-Groq%20LLaMA--3.3--70b-orange)](https://console.groq.com)
 [![Pydantic](https://img.shields.io/badge/validation-Pydantic%20v2-red)](https://docs.pydantic.dev)
 
-</dev>
+</div>
 
 ---
 
